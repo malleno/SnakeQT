@@ -16,13 +16,14 @@ class Snake : public QWidget
 public:
     Snake(QWidget *parent = nullptr);
     ~Snake();
-    GameScene* GetGameScene();
+    GameScene* getGameScene();
     void keyPressEvent(QKeyEvent*);
+
 signals:
     void keyPressed(QKeyEvent*);
-private:
-    Ui::Snake *ui;
-    GameScene* gamescene_;
 
+private:
+    Ui::Snake* ui;
+    GameScene* gamescene_;
 };
 #endif // SNAKE_H

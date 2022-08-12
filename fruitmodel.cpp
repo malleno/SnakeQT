@@ -2,30 +2,41 @@
 
 FruitModel::FruitModel()
 {
-
 }
 
-void FruitModel::SpawnFruit(){
-    auto fruit = CreateFruit();
-    emit AddFruitToGameScene(fruit);
+
+
+void FruitModel::spawnFruit()
+{
+    auto fruit = createFruit();
+    emit addFruitToGameScene(fruit);
 }
 
-QPointF FruitModel::GenerateFruitPosition(){
+
+
+QPointF FruitModel::generateFruitPosition()
+{
     srand(time(0));
     int xPixPos = rand()%22*25;
     int yPixPos = rand()%22*25;
     return QPointF(xPixPos, yPixPos);
 }
 
-QGraphicsPixmapItem* FruitModel::CreateFruit(){
+
+
+QGraphicsPixmapItem* FruitModel::createFruit()
+{
     QPixmap imageOfFruit = QPixmap(":/images/fruit.png");
     imageOfFruit = imageOfFruit.scaled(QSize(25,25));
     QGraphicsPixmapItem* fruitView = new QGraphicsPixmapItem(imageOfFruit);
-    fruitView->setPos(GenerateFruitPosition());
+    fruitView->setPos(generateFruitPosition());
     return fruitView;
 }
 
-void FruitModel::FruitEated(QGraphicsItem* fruieView){
+
+
+void FruitModel::fruitEated(QGraphicsItem* fruieView)
+{
     while(!fruieView->collidingItems().isEmpty()) //FREZZING WHEN SNAKE IS BIG
-    fruieView->setPos(GenerateFruitPosition());
+    fruieView->setPos(generateFruitPosition());
 }

@@ -3,13 +3,13 @@
 #include <qdebug.h>
 
 
-Snake::Snake(QWidget *parent)
-    : QWidget(parent)
-    , ui(new Ui::Snake)
-    , gamescene_(new GameScene())
+Snake::Snake(QWidget *parent) :
+    QWidget(parent),
+    ui(new Ui::Snake),
+    gamescene_(new GameScene())
 {
     ui->setupUi(this);
-    ui->Field->setScene(gamescene_->GetScenePointer());
+    ui->Field->setScene(gamescene_->getScenePointer());
     ui->Field->setHorizontalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     ui->Field->setVerticalScrollBarPolicy(Qt::ScrollBarPolicy::ScrollBarAlwaysOff);
     connect(this, SIGNAL(keyPressed(QKeyEvent*)), gamescene_, SLOT(KeyPressed(QKeyEvent*)));
@@ -17,12 +17,21 @@ Snake::Snake(QWidget *parent)
     connect(ui->resetPushButton, SIGNAL(clicked()), gamescene_, SLOT(ResetGame()));
 }
 
-GameScene* Snake::GetGameScene(){
+
+
+GameScene* Snake::getGameScene()
+{
     return gamescene_;
 }
-void Snake::keyPressEvent(QKeyEvent* event){
+
+
+
+void Snake::keyPressEvent(QKeyEvent* event)
+{
         emit keyPressed(event);
 }
+
+
 
 Snake::~Snake()
 {

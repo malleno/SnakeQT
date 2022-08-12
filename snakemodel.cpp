@@ -1,80 +1,103 @@
 #include "snakemodel.h"
 
-bool ItemNotInGameScene(QGraphicsItem* item){
+bool ItemNotInGameScene(QGraphicsItem* item)
+{
     bool result = false;
     QPointF pos = item->pos();
-    float borderPix = 525.;
-    if(pos.x() < 0 || pos.y() < 0 || pos.x() > borderPix || pos.y() > borderPix){
+    float rightBorderPixel = 525.0;
+    if(pos.x() < 0 || pos.y() < 0 || pos.x() > rightBorderPixel || pos.y() > rightBorderPixel){
         result = true;
     }
     return result;
 }
 
-SnakeModel::SnakeModel(QObject *parent) : QObject(parent)
-  ,body_()
-  , diratction_(RIGHT)
-{
 
+
+SnakeModel::SnakeModel(QObject *parent):
+   QObject(parent),
+   body_(),
+   diratction_(RIGHT)
+{
 }
 
-SnakeModel::SnakeNode* SnakeModel::CreatePartOfSnake(){
-    QPixmap imageOfSnake = QPixmap(":/images/redSqare.jpeg");
+
+
+SnakeModel::SnakeNode* SnakeModel::createPartOfSnake()
+{
+    QPixmap imageOfSnake = QPixmap(":/images/snakePart.png");
     imageOfSnake = imageOfSnake.scaled(QSize(25,25));
     SnakeNode* node = new SnakeNode();
     if(body_.isEmpty()){
         node->nextNodeDiraction_ = diratction_;
     }else{
-        node->nextNodeDiraction_ = GetTail()->nextNodeDiraction_;
+        node->nextNodeDiraction_ = getTail()->nextNodeDiraction_;
     }
     node->scene_veiw_ = new QGraphicsPixmapItem(imageOfSnake);
     return node;
 }
 
-SnakeModel::SnakeNode* SnakeModel::GetHead(){
+
+
+SnakeModel::SnakeNode* SnakeModel::getHead()
+{
     return body_.front();
 }
 
-SnakeModel::SnakeNode* SnakeModel::GetTail(){
+
+
+SnakeModel::SnakeNode* SnakeModel::getTail()
+{
     return body_.back();
 }
 
-void SnakeModel::AddPartOfSnake(){
-    SnakeNode* node = CreatePartOfSnake();
+
+
+void SnakeModel::addPartOfSnake()
+{
+    SnakeNode* node = createPartOfSnake();
     if(!body_.isEmpty()){
-        SnakeNode* wasNodeTail = GetTail();
+        SnakeNode* wasNodeTail = getTail();
         node->scene_veiw_->setPos(wasNodeTail->scene_veiw_->pos());
     }
     body_.push_back(node);
-    ReverseMovePartOfSnake(node);;
-    emit AddPartOfSnakeToGameScene(node);
+    reverseMovePartOfSnake(node);;
+    emit addPartOfSnakeToGameScene(node);
 }
 
 
-void SnakeModel::MovePartOfSnake(SnakeNode* part){
+
+void SnakeModel::movePartOfSnake(SnakeNode* part)
+{
     if(part->nextNodeDiraction_ == LEFT){
-        MovePartOfSnakeLeft(part);
+        movePartOfSnakeLeft(part);
     }else if(part->nextNodeDiraction_ == UP){
-        MovePartOfSnakeUp(part);
+        movePartOfSnakeUp(part);
     }else if(part->nextNodeDiraction_ == RIGHT){
-        MovePartOfSnakeRight(part);
+        movePartOfSnakeRight(part);
     }else if(part->nextNodeDiraction_ == DOWN){
-        MovePartOfSnakeDown(part);
+        movePartOfSnakeDown(part);
     }
 }
 
-void SnakeModel::ReverseMovePartOfSnake(SnakeNode* part){
+
+
+void SnakeModel::reverseMovePartOfSnake(SnakeNode* part)
+{
     if(part->nextNodeDiraction_ == RIGHT){
-        MovePartOfSnakeLeft(part);
+        movePartOfSnakeLeft(part);
     }else if(part->nextNodeDiraction_ == DOWN){
-        MovePartOfSnakeUp(part);
+        movePartOfSnakeUp(part);
     }else if(part->nextNodeDiraction_ == LEFT){
-        MovePartOfSnakeRight(part);
+        movePartOfSnakeRight(part);
     }else if(part->nextNodeDiraction_ == UP){
-        MovePartOfSnakeDown(part);
+        movePartOfSnakeDown(part);
     }
 }
 
-void SnakeModel::MovePartOfSnakeLeft(SnakeNode* snakeNode){
+
+
+void SnakeModel::movePartOfSnakeLeft(SnakeNode* snakeNode)
+{
     QGraphicsItem* sceneViewOfNode = snakeNode->scene_veiw_;
     sceneViewOfNode->setPos(sceneViewOfNode->pos() + QPointF(-25,0));
     if(ItemNotInGameScene(sceneViewOfNode)){
@@ -82,7 +105,10 @@ void SnakeModel::MovePartOfSnakeLeft(SnakeNode* snakeNode){
     }
 }
 
-void SnakeModel::MovePartOfSnakeUp(SnakeNode* snakeNode){
+
+
+void SnakeModel::movePartOfSnakeUp(SnakeNode* snakeNode)
+{
     QGraphicsItem* sceneViewOfNode = snakeNode->scene_veiw_;
     sceneViewOfNode->setPos(sceneViewOfNode->pos() + QPointF(0,-25));
     if(ItemNotInGameScene(sceneViewOfNode)){
@@ -90,7 +116,10 @@ void SnakeModel::MovePartOfSnakeUp(SnakeNode* snakeNode){
     }
 }
 
-void SnakeModel::MovePartOfSnakeRight(SnakeNode* snakeNode){
+
+
+void SnakeModel::movePartOfSnakeRight(SnakeNode* snakeNode)
+{
     QGraphicsItem* sceneViewOfNode = snakeNode->scene_veiw_;
     sceneViewOfNode->setPos(sceneViewOfNode->pos() + QPointF(25,0));
     if(ItemNotInGameScene(sceneViewOfNode)){
@@ -98,7 +127,10 @@ void SnakeModel::MovePartOfSnakeRight(SnakeNode* snakeNode){
     }
 }
 
-void SnakeModel::MovePartOfSnakeDown(SnakeNode* snakeNode){
+
+
+void SnakeModel::movePartOfSnakeDown(SnakeNode* snakeNode)
+{
     QGraphicsItem* sceneViewOfNode = snakeNode->scene_veiw_;
     sceneViewOfNode->setPos(sceneViewOfNode->pos() + QPointF(0, 25));
     if(ItemNotInGameScene(sceneViewOfNode)){
@@ -106,48 +138,67 @@ void SnakeModel::MovePartOfSnakeDown(SnakeNode* snakeNode){
     }
 }
 
-void SnakeModel::nextFrameSlot(){
-    UpdateNextNodeDiractions();
+
+
+void SnakeModel::nextFrameSlot()
+{
+    updateNextNodeDiractions();
     for(auto partOfSnake : body_){
-        MovePartOfSnake(partOfSnake);
+        movePartOfSnake(partOfSnake);
     }
-    CollideChek();
+    collideChek();
 }
 
-void SnakeModel::CollideChek(){
-    auto ListOfCollidingItems = GetHead()->scene_veiw_->collidingItems();
+
+
+void SnakeModel::collideChek()
+{
+    auto ListOfCollidingItems = getHead()->scene_veiw_->collidingItems();
     if(!ListOfCollidingItems.isEmpty()){
-        Collide(ListOfCollidingItems);
+        collide(ListOfCollidingItems);
     }
 }
 
-void SnakeModel::Collide(QList<QGraphicsItem *> listOfCollidingItems){
+
+
+void SnakeModel::collide(QList<QGraphicsItem *> listOfCollidingItems)
+{
     auto collidingItem = listOfCollidingItems.back();
     for(auto node : body_){
         if(node->scene_veiw_ == collidingItem){
-            emit CollideWithSnake();
+            emit collideWithSnake();
             return;
         }
     }
-    AddPartOfSnake();
-    emit CollideWithFruit(collidingItem);
-}
-void SnakeModel::makeSnake(){
-    body_.clear();
-    AddPartOfSnake();
-    GetTail()->scene_veiw_->setPos(200,200);
-    AddPartOfSnake();
-    AddPartOfSnake();
+    addPartOfSnake();
+    emit collideWithFruit(collidingItem);
 }
 
-void SnakeModel::ChangeDiractionOfHead(QKeyEvent* event){
+
+
+void SnakeModel::makeSnake()
+{
+    body_.clear();
+    addPartOfSnake();
+    getTail()->scene_veiw_->setPos(200,200);
+    addPartOfSnake();
+    addPartOfSnake();
+}
+
+
+
+void SnakeModel::changeDiractionOfHead(QKeyEvent* event)
+{
     if (event->key() == Qt::Key_A) diratction_ = LEFT;
     if (event->key() == Qt::Key_W) diratction_ = UP;
     if (event->key() == Qt::Key_D) diratction_ = RIGHT;
     if (event->key() == Qt::Key_S) diratction_ = DOWN;
 }
 
-void SnakeModel::UpdateNextNodeDiractions(){
+
+
+void SnakeModel::updateNextNodeDiractions()
+{
     auto nodeIter = --body_.end();
     auto nextNodeIter = --(--body_.end());
     while (nodeIter != body_.begin()){
@@ -155,12 +206,15 @@ void SnakeModel::UpdateNextNodeDiractions(){
         --nodeIter;
         --nextNodeIter;
     }
-    if(ReverseDiraction( GetHead()->nextNodeDiraction_) != diratction_){
-         GetHead()->nextNodeDiraction_ = diratction_;
+    if(reverseDiraction( getHead()->nextNodeDiraction_) != diratction_){
+         getHead()->nextNodeDiraction_ = diratction_;
     }
 }
 
-SnakeModel::Diraction SnakeModel::ReverseDiraction(Diraction diraction){
+
+
+SnakeModel::Diraction SnakeModel::reverseDiraction(Diraction diraction)
+{
     Diraction result = UP;
     if(diraction == UP){
         result = DOWN;

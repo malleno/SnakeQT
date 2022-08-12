@@ -11,41 +11,46 @@ class SnakeModel: public QObject
     Q_OBJECT
     enum Diraction {LEFT, UP, RIGHT, DOWN};
 
-
 public:
     struct SnakeNode : public QObject{
         Diraction nextNodeDiraction_;
         QGraphicsPixmapItem* scene_veiw_;
     };
+
     SnakeModel(QObject* parent = nullptr);
-    SnakeNode* GetHead();
-    SnakeNode* GetTail();
+    SnakeNode* getHead();
+    SnakeNode* getTail();
+
 public slots:
     void nextFrameSlot();
     void makeSnake();
-    void ChangeDiractionOfHead(QKeyEvent*);
+    void changeDiractionOfHead(QKeyEvent*);
 
 signals:
-    void AddPartOfSnakeToGameScene(SnakeModel::SnakeNode*);
-    void CollideWithFruit(QGraphicsItem*);
-    void CollideWithSnake();
+    void addPartOfSnakeToGameScene(SnakeModel::SnakeNode*);
+    void collideWithFruit(QGraphicsItem*);
+    void collideWithSnake();
+
 private:
-    QList<SnakeNode*> body_;
-    Diraction diratction_;
+    void addPartOfSnake();
+    SnakeNode* createPartOfSnake();
 
-    void AddPartOfSnake();
-    SnakeNode* CreatePartOfSnake();
-    void MovePartOfSnake(SnakeNode*);
-    void ReverseMovePartOfSnake(SnakeNode*);
-    void MovePartOfSnakeLeft(SnakeNode*);
-    void MovePartOfSnakeUp(SnakeNode*);
-    void MovePartOfSnakeRight(SnakeNode*);
-    void MovePartOfSnakeDown(SnakeNode*);
-    void UpdateNextNodeDiractions();
-    Diraction ReverseDiraction(Diraction);
-    void CollideChek();
-    void Collide(QList<QGraphicsItem *>);
+    void movePartOfSnake(SnakeNode*);
+    void reverseMovePartOfSnake(SnakeNode*);
+    void movePartOfSnakeLeft(SnakeNode*);
+    void movePartOfSnakeUp(SnakeNode*);
+    void movePartOfSnakeRight(SnakeNode*);
+    void movePartOfSnakeDown(SnakeNode*);
 
+    void updateNextNodeDiractions();
+    Diraction reverseDiraction(Diraction);
+
+    void collideChek();
+    void collide(QList<QGraphicsItem *>);
+
+private:
+    QList<SnakeNode*>  body_;
+    Diraction          diratction_;
 };
 
 #endif // SNAKEMODEL_H

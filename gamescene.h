@@ -12,30 +12,31 @@ class GameScene : public QWidget
     Q_OBJECT
 public:
     explicit GameScene(QWidget *parent = nullptr);
-    QGraphicsScene* GetScenePointer();
-    void CreateSnake();
-    void CreateFruit();
+    QGraphicsScene* getScenePointer();
 
-private:
-    QGraphicsScene* gameScene_;
-    QTimer* gameLoop_;
-
-    void SetupGameLoop();
 signals:
     void moveSnake();
     void makeSnake();
     void makeFruit();
-    void ChangeDiractionOfSnake(QKeyEvent*);
-    void FruitEated(QGraphicsItem*);
+    void changeDiractionOfSnake(QKeyEvent*);
+    void fruitEated(QGraphicsItem*);
+
 public slots:
     void addFruit(QGraphicsPixmapItem*);
     void addSnakePart(SnakeModel::SnakeNode*);
-    void KeyPressed(QKeyEvent*);
+    void keyPressed(QKeyEvent*);
     void nextFrameSlot();
-    void CollideWithSnake();
-    void CollideWithFruit(QGraphicsItem*);
-    void GameSpeedChange(int);
-    void ResetGame();
+    void collideWithSnake();
+    void collideWithFruit(QGraphicsItem*);
+    void gameSpeedChange(int);
+    void resetGame();
+private:
+    void setupGameLoop();
+    void createSnake();
+    void createFruit();
+private:
+    QGraphicsScene* gameScene_;
+    QTimer*         gameLoop_;
 };
 
 #endif // GAMESCENE_H

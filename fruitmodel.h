@@ -7,17 +7,21 @@
 class FruitModel : public QObject
 {
     Q_OBJECT
+
 public:
     FruitModel();
+
 signals:
-    void AddFruitToGameScene(QGraphicsPixmapItem*);
+    void addFruitToGameScene(QGraphicsPixmapItem*);
+
 public slots:
-    void SpawnFruit();
-    void FruitEated(QGraphicsItem*);
+    void spawnFruit();
+    void fruitEated(QGraphicsItem*);
+
 private:
-    void ChangePosOfFruit();
-    QPointF GenerateFruitPosition();
-    QGraphicsPixmapItem* CreateFruit();
+    void changePosOfFruit();
+    QPointF generateFruitPosition();
+    QGraphicsPixmapItem* createFruit();
 };
 
 #endif // FRUITMODEL_H
